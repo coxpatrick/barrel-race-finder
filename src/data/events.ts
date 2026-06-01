@@ -1,28 +1,33 @@
-// ─── Sample Data ──────────────────────────────────────────────────────────────
-// NOTE: Replace this file with API calls to Firebase/Supabase when ready.
-// The data structure matches the BarrelRace interface exactly.
+// ─── Events Data ──────────────────────────────────────────────────────────────
+// Sample data lives here until Firebase/Supabase is connected.
 //
-// Placeholder arena images use Unsplash western/rodeo photos.
-// Replace with actual event flyer uploads in production.
+// To add a real backend:
+//   1. Move sampleEvents to a Firestore collection or Supabase table
+//   2. Replace getAllEvents() with an async fetch
+//   3. Remove the localStorage layer — that's only for the no-backend MVP
+//
+// localStorage key used by SubmitEventPage: 'brf_submitted_events'
 
-import { BarrelRace } from '../types';
+import { BarrelRace } from '../types'
+import { STORAGE_KEY } from '../pages/SubmitEventPage'
 
-// Curated Unsplash western/arena images (free to use)
-const ARENA_IMGS = [
-  'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80', // cowgirl riding
-  'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600&q=80', // horse running
-  'https://images.unsplash.com/photo-1598127969898-f9f7289c06ca?w=600&q=80', // rodeo
-  'https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&q=80', // horse field
-  'https://images.unsplash.com/photo-1534126416832-a88fdf2911c2?w=600&q=80', // cowgirl
-  'https://images.unsplash.com/photo-1622836464462-e7a1cbb9e3b0?w=600&q=80', // western arena
-  'https://images.unsplash.com/photo-1548976994-e2c56b62e22f?w=600&q=80', // horses sunset
-  'https://images.unsplash.com/photo-1516616370751-86d6bd8b0651?w=600&q=80', // rodeo cowboy
-];
+// ─── Placeholder images ───────────────────────────────────────────────────────
 
-const img = (i: number) => ARENA_IMGS[i % ARENA_IMGS.length];
+const IMGS = [
+  'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80',
+  'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600&q=80',
+  'https://images.unsplash.com/photo-1598127969898-f9f7289c06ca?w=600&q=80',
+  'https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&q=80',
+  'https://images.unsplash.com/photo-1534126416832-a88fdf2911c2?w=600&q=80',
+  'https://images.unsplash.com/photo-1548976994-e2c56b62e22f?w=600&q=80',
+  'https://images.unsplash.com/photo-1516616370751-86d6bd8b0651?w=600&q=80',
+  'https://images.unsplash.com/photo-1622836464462-e7a1cbb9e3b0?w=600&q=80',
+]
+const img = (i: number) => IMGS[i % IMGS.length]
+
+// ─── Sample events ────────────────────────────────────────────────────────────
 
 export const sampleEvents: BarrelRace[] = [
-  // ── JUNE 2025 ──────────────────────────────────────────────────────────────
   {
     id: 'evt-001',
     name: 'Lone Star Summer Barrel Bash',
@@ -34,7 +39,7 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '516 W Main St, Weatherford, TX 76086',
     addedMoney: 5000,
     entryFee: 60,
-    classes: ['Open', '1D–4D', 'Youth', 'Novice Horse'],
+    classes: ['Open', '1D–4D', 'Youth 12 & Under', 'Novice Horse'],
     flyerImageUrl: img(0),
     facebookUrl: 'https://facebook.com',
     contactName: 'Ronda Hawkins',
@@ -58,7 +63,7 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '100 Exposition Blvd, Ardmore, OK 73401',
     addedMoney: 10000,
     entryFee: 85,
-    classes: ['Futurity', 'Derby', 'Open 1D–4D', 'Senior'],
+    classes: ['Futurity', 'Derby', '1D–4D', 'Senior 50+'],
     flyerImageUrl: img(1),
     facebookUrl: 'https://facebook.com',
     websiteUrl: 'https://example.com',
@@ -93,8 +98,6 @@ export const sampleEvents: BarrelRace[] = [
     lat: 35.0844,
     lng: -106.6504,
   },
-
-  // ── JULY 2025 ──────────────────────────────────────────────────────────────
   {
     id: 'evt-004',
     name: 'Bluegrass Barrel Race',
@@ -129,7 +132,7 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '308 6th Ave N, Billings, MT 59101',
     addedMoney: 8000,
     entryFee: 75,
-    classes: ['Open', 'Novice', '1D–5D', 'Senior 50+'],
+    classes: ['Open', 'Novice Rider', '1D–5D', 'Senior 50+'],
     flyerImageUrl: img(4),
     facebookUrl: 'https://facebook.com',
     websiteUrl: 'https://example.com',
@@ -152,7 +155,7 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '401 Larry Walker Pkwy, Perry, GA 31069',
     addedMoney: 0,
     entryFee: 40,
-    classes: ['Open 1D–4D', 'Youth', 'Lead Line'],
+    classes: ['Open', '1D–4D', 'Youth 13–17', 'Lead Line'],
     flyerImageUrl: img(5),
     facebookUrl: 'https://facebook.com',
     contactName: 'Kayla Durden',
@@ -174,7 +177,7 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '1209 N Graham St, Stephenville, TX 76401',
     addedMoney: 4000,
     entryFee: 65,
-    classes: ['Open', '1D–4D', 'Futurity', 'Youth', 'Poles & Flags'],
+    classes: ['Open', '1D–4D', 'Futurity', 'Youth 12 & Under', 'Poles'],
     flyerImageUrl: img(6),
     facebookUrl: 'https://facebook.com',
     contactName: 'Deb Whitfield',
@@ -186,8 +189,6 @@ export const sampleEvents: BarrelRace[] = [
     lat: 32.2207,
     lng: -98.2028,
   },
-
-  // ── AUGUST 2025 ───────────────────────────────────────────────────────────
   {
     id: 'evt-008',
     name: 'Sunflower State Barrel Classic',
@@ -199,7 +200,7 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '2000 N Poplar St, Hutchinson, KS 67502',
     addedMoney: 6000,
     entryFee: 70,
-    classes: ['Open', '1D–4D', 'Senior', 'Youth'],
+    classes: ['Open', '1D–4D', 'Senior 50+', 'Youth 13–17'],
     flyerImageUrl: img(7),
     facebookUrl: 'https://facebook.com',
     contactName: 'Jim Strickler',
@@ -222,7 +223,7 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '1025 Blue Ridge Rd, Raleigh, NC 27607',
     addedMoney: 7500,
     entryFee: 80,
-    classes: ['Futurity', 'Derby', 'Open 1D–4D', 'Youth'],
+    classes: ['Futurity', 'Derby', '1D–4D', 'Youth 13–17'],
     flyerImageUrl: img(0),
     facebookUrl: 'https://facebook.com',
     websiteUrl: 'https://example.com',
@@ -268,20 +269,18 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '4655 Humboldt St, Denver, CO 80216',
     addedMoney: 5000,
     entryFee: 60,
-    classes: ['Open', '1D–4D', 'Youth', 'Senior 55+'],
+    classes: ['Open', '1D–4D', 'Youth 12 & Under', 'Senior 55+'],
     flyerImageUrl: img(2),
     facebookUrl: 'https://facebook.com',
     websiteUrl: 'https://example.com',
     contactName: 'Kyle Buchanan',
     contactPhone: '(303) 555-0277',
-    notes: 'Indoor arena with world-class footing. Altitude: 5,280 ft. Water available.',
+    notes: 'Indoor arena with world-class footing. Altitude: 5,280 ft.',
     isFeatured: true,
     isApproved: true,
     lat: 39.7751,
     lng: -104.9604,
   },
-
-  // ── SEPTEMBER 2025 ────────────────────────────────────────────────────────
   {
     id: 'evt-012',
     name: 'Gulf Coast Barrel Race Championship',
@@ -318,7 +317,7 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '16601 N Pima Rd, Scottsdale, AZ 85260',
     addedMoney: 4500,
     entryFee: 65,
-    classes: ['Open', '1D–4D', 'Youth', 'Novice Rider'],
+    classes: ['Open', '1D–4D', 'Youth 13–17', 'Novice Rider'],
     flyerImageUrl: img(4),
     facebookUrl: 'https://facebook.com',
     contactName: 'Sandra Vega',
@@ -341,7 +340,7 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '333 Gordon Cooper Blvd, Oklahoma City, OK 73107',
     addedMoney: 12000,
     entryFee: 90,
-    classes: ['Futurity', 'Derby', 'Open', '1D–5D', 'Senior'],
+    classes: ['Futurity', 'Derby', 'Open', '1D–5D', 'Senior 50+'],
     flyerImageUrl: img(5),
     facebookUrl: 'https://facebook.com',
     websiteUrl: 'https://example.com',
@@ -354,8 +353,6 @@ export const sampleEvents: BarrelRace[] = [
     lat: 35.4676,
     lng: -97.5164,
   },
-
-  // ── OCTOBER 2025 ──────────────────────────────────────────────────────────
   {
     id: 'evt-015',
     name: 'Lone Star State Finals',
@@ -368,14 +365,14 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '1911 Montgomery St, Fort Worth, TX 76107',
     addedMoney: 20000,
     entryFee: 120,
-    classes: ['Open Championship', 'Futurity', 'Derby', 'Amateur', 'Youth Championship'],
+    classes: ['Open', 'Futurity', 'Derby', 'Amateur', 'Youth 12 & Under'],
     flyerImageUrl: img(6),
     facebookUrl: 'https://facebook.com',
     websiteUrl: 'https://example.com',
     contactName: 'Lisa Garrett',
     contactPhone: '(817) 555-0720',
     contactEmail: 'lisa@lonestarfinals.com',
-    notes: 'State championship event. Qualification required for Open division. $20,000 added money. Live broadcast.',
+    notes: 'State championship event. $20,000 added money. Live broadcast.',
     isFeatured: true,
     isApproved: true,
     lat: 32.7441,
@@ -393,12 +390,12 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '7777 Walnut Grove Rd, Memphis, TN 38120',
     addedMoney: 3500,
     entryFee: 55,
-    classes: ['Open', '1D–4D', 'Youth 17 & Under', 'Senior 50+', 'Novice'],
+    classes: ['Open', '1D–4D', 'Youth 13–17', 'Senior 50+', 'Novice Rider'],
     flyerImageUrl: img(7),
     facebookUrl: 'https://facebook.com',
     contactName: 'Rebecca Norris',
     contactPhone: '(901) 555-0440',
-    notes: 'Two days of barrel racing fun. Indoor climate-controlled arena.',
+    notes: 'Two days of barrel racing. Indoor climate-controlled arena.',
     isFeatured: false,
     isApproved: true,
     lat: 35.1175,
@@ -415,13 +412,13 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '1205 SW Court Ave, Pendleton, OR 97801',
     addedMoney: 5000,
     entryFee: 65,
-    classes: ['Open', '1D–4D', 'Youth', 'Lead Line', 'Poles'],
+    classes: ['Open', '1D–4D', 'Youth 12 & Under', 'Lead Line', 'Poles'],
     flyerImageUrl: img(0),
     facebookUrl: 'https://facebook.com',
     contactName: 'Cheryl Hanna',
     contactPhone: '(541) 555-0291',
     contactEmail: 'cheryl@pnwbarrel.com',
-    notes: 'Historic Pendleton Round-Up grounds. Camping available on site. Western heritage event.',
+    notes: 'Historic Pendleton Round-Up grounds. Camping available on site.',
     isFeatured: false,
     isApproved: true,
     lat: 45.6721,
@@ -438,7 +435,7 @@ export const sampleEvents: BarrelRace[] = [
     arenaAddress: '105 E Pascagoula St, Jackson, MS 39201',
     addedMoney: 2000,
     entryFee: 45,
-    classes: ['Open', '2D–4D', 'Youth', 'Beginner'],
+    classes: ['Open', '2D–4D', 'Youth 13–17', 'Beginner'],
     flyerImageUrl: img(1),
     facebookUrl: 'https://facebook.com',
     contactName: 'Wanda Hollis',
@@ -449,21 +446,47 @@ export const sampleEvents: BarrelRace[] = [
     lat: 32.2988,
     lng: -90.1848,
   },
-];
+]
 
-// ─── Helper: Get featured events ──────────────────────────────────────────────
+// ─── localStorage loader ───────────────────────────────────────────────────────
+
+function loadSubmittedEvents(): BarrelRace[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? (JSON.parse(raw) as BarrelRace[]) : []
+  } catch {
+    return []
+  }
+}
+
+// ─── Public API ───────────────────────────────────────────────────────────────
+
+/**
+ * Returns all events: hardcoded samples + anything the user has submitted
+ * via the Submit Event form (stored in localStorage).
+ *
+ * TODO: Replace with a single async fetch when backend is connected:
+ *   export async function getAllEvents(): Promise<BarrelRace[]> {
+ *     const { data } = await supabase.from('events').select('*').eq('is_approved', true)
+ *     return data ?? []
+ *   }
+ */
+export function getAllEvents(): BarrelRace[] {
+  const submitted = loadSubmittedEvents()
+  // Submitted events appear at the top so users see their entry immediately
+  return [...submitted, ...sampleEvents]
+}
+
 export const getFeaturedEvents = (): BarrelRace[] =>
-  sampleEvents.filter((e) => e.isFeatured).slice(0, 6);
+  sampleEvents.filter(e => e.isFeatured).slice(0, 6)
 
-// ─── Helper: Get event by ID ───────────────────────────────────────────────────
 export const getEventById = (id: string): BarrelRace | undefined =>
-  sampleEvents.find((e) => e.id === id);
+  getAllEvents().find(e => e.id === id)
 
-// ─── Helper: Get all unique states ────────────────────────────────────────────
 export const getUniqueStates = (): { value: string; label: string }[] => {
-  const map = new Map<string, string>();
-  sampleEvents.forEach((e) => map.set(e.stateCode, e.state));
+  const map = new Map<string, string>()
+  getAllEvents().forEach(e => map.set(e.stateCode, e.state))
   return Array.from(map.entries())
     .map(([value, label]) => ({ value, label }))
-    .sort((a, b) => a.label.localeCompare(b.label));
-};
+    .sort((a, b) => a.label.localeCompare(b.label))
+}

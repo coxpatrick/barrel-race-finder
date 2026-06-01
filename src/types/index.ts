@@ -35,6 +35,7 @@ export interface EventFilters {
   state: string;
   month: string;
   minAddedMoney: number;
+  classes: string[];      // Selected classes to filter by
   maxDistance: number;    // Miles from user location (future feature)
   sortBy: SortOption;
 }
