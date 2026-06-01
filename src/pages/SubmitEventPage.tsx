@@ -97,8 +97,8 @@ function validateStep(step: number, form: EventSubmission): FormErrors {
     if (Number(form.entryFee) <= 0) e.entryFee = 'Entry fee must be greater than $0'
   }
   if (step === 3) {
-    if (!form.contactName.trim()) e.contactName = 'Contact name is required'
-    if (!form.contactEmail.trim() && !form.contactPhone.trim())
+    if (!form.contactName?.trim()) e.contactName = 'Contact name is required'
+    if (!form.contactEmail?.trim() && !form.contactPhone?.trim())
       e.contactEmail = 'Provide at least one contact method'
   }
   return e
