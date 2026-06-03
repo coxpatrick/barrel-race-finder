@@ -6,7 +6,8 @@ import BrowseEventsPage from './pages/BrowseEventsPage';
 import EventDetailPage from './pages/EventDetailPage';
 import SubmitEventPage from './pages/SubmitEventPage';
 import AboutPage from './pages/AboutPage';
-
+import AuthPage from './pages/AuthPage';
+import AccountPage from './pages/AccountPage';
 // Scroll to top on route change
 function ScrollToTop() {
   return null; // react-router-dom v6 handles this via ScrollRestoration
@@ -24,6 +25,8 @@ export default function App() {
             <Route path="/events/:id"   element={<EventDetailPage />} />
             <Route path="/submit"       element={<SubmitEventPage />} />
             <Route path="/about"        element={<AboutPage />} />
+            <Route path="/auth"         element={<AuthPage />} />
+            <Route path="/account"      element={<AccountPage />} />
             {/* TODO: Add protected routes when user auth is implemented */}
             {/* <Route path="/dashboard"  element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} /> */}
             {/* <Route path="/favorites"  element={<ProtectedRoute><FavoritesPage /></ProtectedRoute>} /> */}
