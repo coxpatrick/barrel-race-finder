@@ -4,14 +4,15 @@ import { Search, ChevronRight, MapPin, Calendar, Star, ArrowRight } from 'lucide
 import EventCard from '../components/EventCard';
 import StatsBanner from '../components/StatsBanner';
 import SearchBar from '../components/SearchBar';
-import { getFeaturedEvents } from '../data/events';
+import { useFeaturedEvents } from '../hooks/useEvents'
+import { SkeletonGrid } from '../components/SkeletonCard'
 
 const HERO_BG = 'https://images.unsplash.com/photo-1622836464462-e7a1cbb9e3b0?w=1600&q=80';
 
 export default function HomePage() {
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
-  const featured = getFeaturedEvents();
+  const { events: featured, loading: featuredLoading } = useFeaturedEvents()
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -152,20 +153,24 @@ export default function HomePage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featured.map((event, i) => (
-              <div
-                key={event.id}
-                className="animate-fade-up opacity-0-init"
-                style={{
-                  animationFillMode: 'forwards',
-                  animationDelay: `${i * 80}ms`,
-                }}
-              >
-                <EventCard event={event} featured />
-              </div>
-            ))}
-          </div>
+          {featuredLoading ? (
+            <SkeletonGrid count={6} />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featured.map((event, i) => (
+                <div
+                  key={event.id}
+                  className="animate-fade-up opacity-0-init"
+                  style={{
+                    animationFillMode: 'forwards',
+                    animationDelay: `${i * 80}ms`,
+                  }}
+                >
+                  <EventCard event={event} featured />
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="mt-10 text-center md:hidden">
             <button

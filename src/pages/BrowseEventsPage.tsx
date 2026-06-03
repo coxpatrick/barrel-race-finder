@@ -4,8 +4,8 @@ import { SlidersHorizontal, X, Search, ArrowUp } from 'lucide-react'
 import EventCard from '../components/EventCard'
 import FilterPanel from '../components/FilterPanel'
 import { SkeletonGrid } from '../components/SkeletonCard'
-import { getAllEvents } from '../data/events'
 import { useEventFilters } from '../hooks/useEventFilters'
+import { useEvents } from '../hooks/useEvents'
 import { US_STATES } from '../data/constants'
 
 export default function BrowseEventsPage() {
@@ -14,6 +14,8 @@ export default function BrowseEventsPage() {
   const [loading, setLoading]                     = useState(true)
   const [showBackToTop, setShowBackToTop]         = useState(false)
 
+const { events, loading: eventsLoading, error: eventsError } = useEvents()
+
   const {
     filters,
     filteredEvents,
@@ -21,15 +23,12 @@ export default function BrowseEventsPage() {
     toggleClass,
     resetFilters,
     activeFilterCount,
-  } = useEventFilters(getAllEvents())
+  } = useEventFilters(events)
 
-  // ── Simulated loading state ────────────────────────────────────────────────
-  // TODO: Replace setTimeout with your real async data fetch when connecting
-  // Firebase or Supabase. Set loading=true before the fetch, false after.
+// Real loading state comes from useEvents — sync it to local state
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 600)
-    return () => clearTimeout(timer)
-  }, [])
+    setLoading(eventsLoading)
+  }, [eventsLoading])
 
   // ── Sync URL params → filters on first mount ───────────────────────────────
   useEffect(() => {
@@ -236,8 +235,48 @@ export default function BrowseEventsPage() {
               </div>
             )}
 
+{/* ── Error state ────────────────────────────────────────────── */}
+            {!loading && eventsError && (
+              <div className="text-center py-20 bg-white rounded-2xl
+                              border border-dust-100 px-6">
+                <div className="text-5xl mb-4">⚠️</div>
+                <h3 className="font-display text-xl font-700 text-charcoal mb-2">
+                  Couldn't load races
+                </h3>
+                <p className="font-body text-dust-500 mb-6 max-w-sm mx-auto">
+                  {eventsError}
+                </p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="btn-primary"
+                >
+                  Try Again
+                </button>
+              </div>
+            )}
+
+{/* ── Error state ────────────────────────────────────────────── */}
+            {!loading && eventsError && (
+              <div className="text-center py-20 bg-white rounded-2xl
+                              border border-dust-100 px-6">
+                <div className="text-5xl mb-4">⚠️</div>
+                <h3 className="font-display text-xl font-700 text-charcoal mb-2">
+                  Couldn't load races
+                </h3>
+                <p className="font-body text-dust-500 mb-6 max-w-sm mx-auto">
+                  {eventsError}
+                </p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="btn-primary"
+                >
+                  Try Again
+                </button>
+              </div>
+            )}
+
             {/* ── Empty state ────────────────────────────────────────────── */}
-            {!loading && filteredEvents.length === 0 && (
+            {!loading && !eventsError && filteredEvents.length === 0 && (
               <div className="text-center py-20 bg-white rounded-2xl
                               border border-dust-100 px-6">
                 <div className="text-5xl mb-4">🐎</div>
@@ -260,7 +299,7 @@ export default function BrowseEventsPage() {
             )}
 
             {/* ── Results grid ───────────────────────────────────────────── */}
-            {!loading && filteredEvents.length > 0 && (
+            {!loading && !eventsError && filteredEvents.length > 0 && (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                   {filteredEvents.map((event, i) => (

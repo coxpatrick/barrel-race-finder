@@ -6,8 +6,15 @@ export default {
   ],
   theme: {
     extend: {
+      fontWeight: {
+        '400': '400',
+        '500': '500',
+        '600': '600',
+        '700': '700',
+        '800': '800',
+        '900': '900',
+      },
       colors: {
-        // Western-inspired palette
         saddle: {
           50:  '#fdf8f0',
           100: '#f9edda',
@@ -60,40 +67,37 @@ export default {
           900: '#353d27',
           950: '#1b2012',
         },
-        leather: '#8B4513',
-        cream: '#FFF8F0',
+        leather:  '#8B4513',
+        cream:    '#FFF8F0',
         charcoal: '#1C1C1C',
       },
       fontFamily: {
         display: ['"Playfair Display"', 'Georgia', 'serif'],
-        body: ['"Source Serif 4"', 'Georgia', 'serif'],
-        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
-      },
-      backgroundImage: {
-        'grain': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E\")",
+        body:    ['"Source Serif 4"', 'Georgia', 'serif'],
+        sans:    ['"DM Sans"', 'system-ui', 'sans-serif'],
+        mono:    ['"JetBrains Mono"', 'monospace'],
       },
       animation: {
-        'fade-up': 'fadeUp 0.6s ease-out forwards',
-        'fade-in': 'fadeIn 0.4s ease-out forwards',
+        'fade-up':  'fadeUp 0.6s ease-out forwards',
+        'fade-in':  'fadeIn 0.4s ease-out forwards',
         'slide-in': 'slideIn 0.5s ease-out forwards',
-        'shimmer': 'shimmer 2s linear infinite',
+        'shimmer':  'shimmer 1.5s ease-in-out infinite',
       },
       keyframes: {
         fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(24px)' },
+          '0%':   { opacity: '0', transform: 'translateY(24px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         fadeIn: {
-          '0%': { opacity: '0' },
+          '0%':   { opacity: '0' },
           '100%': { opacity: '1' },
         },
         slideIn: {
-          '0%': { opacity: '0', transform: 'translateX(-20px)' },
+          '0%':   { opacity: '0', transform: 'translateX(-20px)' },
           '100%': { opacity: '1', transform: 'translateX(0)' },
         },
         shimmer: {
-          '0%': { backgroundPosition: '-200% 0' },
+          '0%':   { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
         },
       },
