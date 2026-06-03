@@ -15,12 +15,17 @@ import {
   getAddedMoneyBadgeStyle,
 } from '../utils/helpers'
 import EventCard from '../components/EventCard'
-
+import { useAuth } from '../context/AuthContext'
+import { useFavorites } from '../hooks/useFavorites'
 export default function EventDetailPage() {
   const { id }     = useParams<{ id: string }>()
   const navigate   = useNavigate()
-  const { event, loading, error } = useEvent(id)
-  const [similar, setSimilar] = useState<BarrelRace[]>([])
+const { event, loading, error } = useEvent(id)
+  const [similar, setSimilar]     = useState<BarrelRace[]>([])
+  const { user }                  = useAuth()
+  const { isFavorited, toggleFavorite } = useFavorites()
+  const [favLoading, setFavLoading] = useState(false)
+  const [favMessage, setFavMessage] = useState<string | null>(null)
 
   // ── Must be before any early returns ──────────────────────────────────────
   useEffect(() => {
@@ -39,6 +44,22 @@ export default function EventDetailPage() {
   )
   const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`
 
+const handleToggleFavorite = async () => {
+    if (!user) {
+      navigate('/auth')
+      return
+    }
+    if (!event) return
+    setFavLoading(true)
+    await toggleFavorite(event.id)
+    setFavMessage(
+      isFavorited(event.id)
+        ? 'Removed from saved races'
+        : 'Saved to your account'
+    )
+    setTimeout(() => setFavMessage(null), 2500)
+    setFavLoading(false)
+  }
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -314,7 +335,54 @@ export default function EventDetailPage() {
                   No external links provided
                 </div>
               )}
-              {/* TODO: Save to Favorites — wired up in next step */}
+              {/* Save to Favorites */}
+              <div className="border-t border-dust-100 pt-3 mt-1">
+                <button
+                  onClick={handleToggleFavorite}
+                  disabled={favLoading}
+                  className={`w-full flex items-center justify-center gap-2 py-3
+                              font-sans text-sm font-semibold rounded-xl
+                              border-2 transition-all duration-200
+                              disabled:opacity-60 disabled:cursor-not-allowed
+                    ${event && isFavorited(event.id)
+                      ? 'bg-saddle-50 border-saddle-400 text-saddle-700'
+                      : 'bg-white border-dust-200 text-dust-600 hover:border-saddle-400 hover:text-saddle-600'
+                    }`}
+                >
+                  {favLoading ? (
+                    <span className="w-4 h-4 border-2 border-saddle-300
+                                     border-t-saddle-600 rounded-full animate-spin" />
+                  ) : (
+                    <svg
+                      className={`w-4 h-4 transition-all duration-200
+                        ${event && isFavorited(event.id)
+                          ? 'fill-saddle-500 text-saddle-500'
+                          : 'fill-none text-current'
+                        }`}
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12
+                           20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12
+                           7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  )}
+                  {event && isFavorited(event.id)
+                    ? 'Saved to Favorites'
+                    : user ? 'Save to Favorites' : 'Sign in to Save'
+                  }
+                </button>
+
+                {/* Confirmation message */}
+                {favMessage && (
+                  <p className="text-center font-sans text-xs text-saddle-600
+                                mt-2 animate-fade-in">
+                    {favMessage}
+                  </p>
+                )}
+              </div>
             </div>
 
             {(event.contactName || event.contactEmail || event.contactPhone) && (

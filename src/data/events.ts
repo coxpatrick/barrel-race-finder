@@ -9,7 +9,6 @@
 // localStorage key used by SubmitEventPage: 'brf_submitted_events'
 
 import { BarrelRace } from '../types'
-import { STORAGE_KEY } from '../pages/SubmitEventPage'
 
 // ─── Placeholder images ───────────────────────────────────────────────────────
 
@@ -450,13 +449,10 @@ export const sampleEvents: BarrelRace[] = [
 
 // ─── localStorage loader ───────────────────────────────────────────────────────
 
+// localStorage submissions removed — events now save directly to Supabase.
+// This function is kept as a no-op so getAllEvents() still works during transition.
 function loadSubmittedEvents(): BarrelRace[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? (JSON.parse(raw) as BarrelRace[]) : []
-  } catch {
-    return []
-  }
+  return []
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────

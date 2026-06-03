@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
 import {
   CheckCircle, Upload, Info, ChevronRight,
   ChevronLeft, Eye, X, Clock, Star, Globe,
@@ -37,21 +39,9 @@ const EMPTY_FORM: EventSubmission = {
 
 // ─── localStorage helpers ─────────────────────────────────────────────────────
 
-export const STORAGE_KEY = 'brf_submitted_events'
 
-export function loadSubmittedEvents(): BarrelRace[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? (JSON.parse(raw) as BarrelRace[]) : []
-  } catch {
-    return []
-  }
-}
 
-function saveSubmittedEvent(event: BarrelRace): void {
-  const existing = loadSubmittedEvents()
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...existing, event]))
-}
+
 
 function formToBarrelRace(form: EventSubmission): BarrelRace {
   return {
@@ -109,6 +99,7 @@ function validateStep(step: number, form: EventSubmission): FormErrors {
 type SubmitStatus = 'idle' | 'submitting' | 'success'
 
 export default function SubmitEventPage() {
+  const { user } = useAuth()
   const [form, setForm]           = useState<EventSubmission>(EMPTY_FORM)
   const [errors, setErrors]       = useState<FormErrors>({})
   const [status, setStatus]       = useState<SubmitStatus>('idle')
@@ -167,7 +158,7 @@ export default function SubmitEventPage() {
 
   // ── Submit ─────────────────────────────────────────────────────────────────
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const errs = validateStep(3, form)
     if (Object.keys(errs).length > 0) {
@@ -175,10 +166,58 @@ export default function SubmitEventPage() {
       return
     }
     setStatus('submitting')
-    await new Promise(r => setTimeout(r, 900))
-    const race = formToBarrelRace(form)
-    saveSubmittedEvent(race)
-    setSubmittedEvent(race)
+
+    const { data, error } = await supabase
+      .from('events')
+      .insert([{
+        name:            form.name,
+        date:            form.date,
+        end_date:        form.endDate || null,
+        city:            form.city,
+        state:           form.state,
+        state_code:      form.stateCode,
+        arena:           form.arena,
+        arena_address:   form.arenaAddress || null,
+        added_money:     Number(form.addedMoney),
+        entry_fee:       Number(form.entryFee),
+        classes:         form.classes,
+        facebook_url:    form.facebookUrl || null,
+        website_url:     form.websiteUrl || null,
+        contact_name:    form.contactName || null,
+        contact_email:   form.contactEmail || null,
+        contact_phone:   form.contactPhone || null,
+        notes:           form.notes || null,
+        is_approved:     false,
+        is_featured:     false,
+        submitted_by:    user?.id ?? null,
+      }])
+      .select()
+      .single()
+
+    if (error) {
+      setErrors({ name: 'Failed to submit. Please try again.' })
+      setStatus('idle')
+      return
+    }
+
+    // Build a local preview from the returned row
+    const saved: BarrelRace = {
+      id:           data.id,
+      name:         data.name,
+      date:         data.date,
+      endDate:      data.end_date ?? undefined,
+      city:         data.city,
+      state:        data.state,
+      stateCode:    data.state_code,
+      arena:        data.arena,
+      addedMoney:   data.added_money,
+      entryFee:     data.entry_fee,
+      classes:      data.classes ?? [],
+      isFeatured:   false,
+      isApproved:   false,
+    }
+
+    setSubmittedEvent(saved)
     setStatus('success')
   }
 
