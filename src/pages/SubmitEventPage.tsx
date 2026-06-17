@@ -31,7 +31,7 @@ const STEPS = [
 
 const EMPTY_FORM: EventSubmission = {
   name: '', date: '', endDate: '', city: '',
-  state: '', stateCode: '', arena: '', arenaAddress: '',
+  state: '', stateCode: '', arena: '', arenaAddress: '', flyer_url: '',
   addedMoney: 0, entryFee: 0, classes: [],
   flyerFile: null, facebookUrl: '', websiteUrl: '',
   contactName: '', contactEmail: '', contactPhone: '', notes: '',
@@ -159,6 +159,8 @@ export default function SubmitEventPage() {
   // ── Submit ─────────────────────────────────────────────────────────────────
 
 const handleSubmit = async (e: React.FormEvent) => {
+console.log('Submit clicked')
+console.log('Flyer file:', form.flyerFile)
     e.preventDefault()
     const errs = validateStep(3, form)
     if (Object.keys(errs).length > 0) {
@@ -166,8 +168,31 @@ const handleSubmit = async (e: React.FormEvent) => {
       return
     }
     setStatus('submitting')
+let flyerUrl = form.flyer_url || null
 
-    const { data, error } = await supabase
+if (form.flyerFile) {
+  const fileExt = form.flyerFile.name.split('.').pop()
+  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`
+  const filePath = `${user?.id || 'anonymous'}/${fileName}`
+
+  const { error: uploadError } = await supabase.storage
+    .from('event-flyers')
+    .upload(filePath, form.flyerFile)
+console.log('Upload error:', uploadError)
+  if (uploadError) {
+    setErrors({ name: 'Failed to upload flyer. Please try again.' })
+    setStatus('idle')
+    return
+  }
+
+  const { data: publicUrlData } = supabase.storage
+    .from('event-flyers')
+    .getPublicUrl(filePath)
+
+  flyerUrl = publicUrlData.publicUrl
+}
+    console.log('Flyer URL:', flyerUrl)
+const { data, error } = await supabase
       .from('events')
       .insert([{
         name:            form.name,
@@ -175,6 +200,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         end_date:        form.endDate || null,
         city:            form.city,
         state:           form.state,
+        flyer_url: form.flyer_url || null,
         state_code:      form.stateCode,
         arena:           form.arena,
         arena_address:   form.arenaAddress || null,
@@ -727,7 +753,22 @@ const handleSubmit = async (e: React.FormEvent) => {
                     className="input-field"
                   />
                 </div>
+<div>
+  <label htmlFor="flyerFile" className="label">
+    Event Flyer
+  </label>
 
+<input
+  id="flyerFile"
+  type="file"
+  accept="image/*"
+  className="input-field"
+  onChange={(e) => {
+    const file = e.target.files?.[0] || null
+    set('flyerFile', file)
+  }}
+/>
+</div>
                 <div>
                   <label htmlFor="websiteUrl" className="label">
                     Official Website

@@ -55,8 +55,9 @@ export interface EventSubmission {
   arenaAddress?: string;
   addedMoney: number;
   entryFee: number;
-  classes: string[];
+  flyer_url?: string;
   flyerFile?: File | null;
+  classes: string[];
   facebookUrl?: string;
   websiteUrl?: string;
   contactName?: string;
