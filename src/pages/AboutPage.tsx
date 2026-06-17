@@ -13,7 +13,7 @@ export default function AboutPage() {
         />
         <div className="page-container relative text-center">
           <h1 className="font-display text-4xl md:text-5xl font-900 mb-4">
-            About Barrel Race Finder
+            About Barrel Bay
           </h1>
           <p className="font-body text-white/60 text-lg max-w-xl mx-auto">
             Built by barrel racers, for barrel racers.
@@ -34,7 +34,7 @@ export default function AboutPage() {
             Facebook groups, paper flyers, and word-of-mouth. We're changing that.
           </p>
           <p className="font-body text-dust-600 text-lg leading-relaxed max-w-2xl mx-auto mt-4">
-            Barrel Race Finder is a free, easy-to-use platform where riders can search for
+            Barrel Bay is a free, easy-to-use platform where riders can search for
             upcoming events by state, date, and division — and where promoters can list their
             races in minutes.
           </p>

@@ -20,7 +20,7 @@ export default function Footer() {
               <div className="w-9 h-9 bg-saddle-500 rounded-lg flex items-center justify-center">
                 <MapPin className="w-5 h-5 text-white" />
               </div>
-              <span className="font-display text-white text-xl font-700">Barrel Race Finder</span>
+              <span className="font-display text-white text-xl font-700">Barrel Bay</span>
             </Link>
             <p className="font-body text-sm leading-relaxed max-w-xs text-white/60">
               The easiest way for barrel racers to discover upcoming events across the United States.

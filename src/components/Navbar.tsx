@@ -62,17 +62,18 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2.5 group flex-shrink-0">
-              <div className="w-9 h-9 bg-saddle-500 rounded-lg flex items-center
-                              justify-center group-hover:bg-saddle-400 transition-colors">
-                <MapPin className="w-5 h-5 text-white" strokeWidth={2.5} />
-              </div>
+              <img
+  src="/Barrel Bay Logo Main.jpg/Barrel Bay Logo Main.jpg"
+  alt="Barrel Bay Logo"
+  className="h-14 w-auto rounded-md"
+/>
               <div className="flex flex-col leading-none">
                 <span className="font-display text-white font-bold text-lg tracking-tight">
-                  Barrel Race
+                  Barrel Bay
                 </span>
                 <span className="font-sans text-saddle-400 text-[10px] font-semibold
                                  tracking-[0.2em] uppercase">
-                  Finder
+                  Events
                 </span>
               </div>
             </Link>
@@ -278,7 +279,7 @@ export default function Navbar() {
                 )}
 
                 <p className="text-center font-sans text-xs text-white/25 py-2">
-                  Barrel Race Finder · Free to use
+                  Barrel Bay · Free to use
                 </p>
               </div>
             </div>

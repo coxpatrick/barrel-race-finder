@@ -52,7 +52,7 @@ export default function HomePage() {
                style={{ animationFillMode: 'forwards' }}>
             <MapPin className="w-3.5 h-3.5 text-saddle-400" />
             <span className="font-sans text-white/90 text-sm font-500 tracking-wide">
-              The #1 Platform for Barrel Racers
+              America's #1 Barrel Racing Event Finder
             </span>
           </div>
 
@@ -60,7 +60,7 @@ export default function HomePage() {
           <h1 className="font-display text-white text-5xl md:text-6xl lg:text-7xl font-900
                          leading-tight mb-6 text-balance animate-fade-up opacity-0-init animate-delay-100"
               style={{ animationFillMode: 'forwards' }}>
-            Find Barrel Races
+            The Home of Barrel Racing Events
             <br />
             <span className="text-saddle-400">Anywhere.</span>
           </h1>
