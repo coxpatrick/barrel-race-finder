@@ -200,7 +200,7 @@ const { data, error } = await supabase
         end_date:        form.endDate || null,
         city:            form.city,
         state:           form.state,
-        flyer_url: form.flyer_url || null,
+        flyer_image_url: flyerUrl,
         state_code:      form.stateCode,
         arena:           form.arena,
         arena_address:   form.arenaAddress || null,
@@ -218,7 +218,10 @@ const { data, error } = await supabase
         submitted_by:    user?.id ?? null,
       }])
       .select()
+    
       .single()
+      console.log('Event insert error:', error)
+console.log('Event insert data:', data)
 
     if (error) {
       setErrors({ name: 'Failed to submit. Please try again.' })
