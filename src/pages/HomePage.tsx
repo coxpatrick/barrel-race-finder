@@ -52,7 +52,7 @@ export default function HomePage() {
                style={{ animationFillMode: 'forwards' }}>
             <MapPin className="w-3.5 h-3.5 text-saddle-400" />
             <span className="font-sans text-white/90 text-sm font-500 tracking-wide">
-              America's #1 Barrel Racing Event Finder
+              Trusted by Barrel Racers Nationwide
             </span>
           </div>
 
@@ -60,7 +60,7 @@ export default function HomePage() {
           <h1 className="font-display text-white text-5xl md:text-6xl lg:text-7xl font-900
                          leading-tight mb-6 text-balance animate-fade-up opacity-0-init animate-delay-100"
               style={{ animationFillMode: 'forwards' }}>
-            The Home of Barrel Racing Events
+            Find Your Next Barrel Race.
             <br />
             <span className="text-saddle-400">Anywhere.</span>
           </h1>
@@ -93,7 +93,9 @@ export default function HomePage() {
                 className="px-6 py-3.5 bg-saddle-500 hover:bg-saddle-400 text-white font-sans
                            font-600 rounded-xl transition-all duration-200 flex items-center gap-2
                            shadow-lg hover:shadow-xl whitespace-nowrap">
-                Search Races
+                [ Search Races ]
+
+[ Submit Event ]
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>

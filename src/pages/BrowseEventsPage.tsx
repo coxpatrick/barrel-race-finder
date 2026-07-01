@@ -97,11 +97,12 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
       {/* ── Page Header ─────────────────────────────────────────────────── */}
       <div className="bg-charcoal text-white py-10 lg:py-14">
         <div className="page-container">
-          <h1 className="font-display text-3xl md:text-4xl font-700 mb-1">
-            Browse Events
+          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-2">
+            Find Your Next Barrel Race
+          
           </h1>
-          <p className="font-body text-white/60 text-sm md:text-base">
-            Find barrel races happening across the United States.
+          <p className="font-body text-white/70 text-base md:text-lg max-w-2xl">
+            Discover verified barrel races across the United States. Search by state, date, added money, and more.
           </p>
         </div>
       </div>
@@ -118,7 +119,7 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
               value={filters.search}
               onChange={e => updateFilter('search', e.target.value)}
               placeholder="Search race name, city, or state…"
-              className="input-field pl-11 pr-10 py-3 w-full text-sm md:text-base"
+              className="input-field pl-11 pr-10 py-3.5 w-full text-base rounded-2xl shadow-sm focus:shadow-md transition-all"
             />
             {filters.search && (
               <button
@@ -196,18 +197,21 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
             {!loading && (
               <div className="flex items-center justify-between mb-5">
                 <p className="font-sans text-sm text-dust-500">
-                  <strong className="text-charcoal font-600">
-                    {filteredEvents.length}
-                  </strong>{' '}
-                  {filteredEvents.length === 1 ? 'race' : 'races'} found
-                  {filters.search && (
-                    <span className="text-dust-400">
-                      {' '}for &ldquo;
-                      <span className="italic">{filters.search}</span>
-                      &rdquo;
-                    </span>
-                  )}
-                </p>
+  Showing
+  <span className="mx-1 font-bold text-saddle-700">
+    {filteredEvents.length}
+  </span>
+  {filteredEvents.length === 1 ? 'race' : 'races'}
+  {filters.search && (
+    <span className="text-dust-400">
+      {' '}for &ldquo;
+      <span className="italic">{filters.search}</span>
+      &rdquo;
+    </span>
+  )}
+</p>
+
+               
 
                 {/* Mobile sort — only visible when not loading */}
                 <select
@@ -235,25 +239,6 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
               </div>
             )}
 
-{/* ── Error state ────────────────────────────────────────────── */}
-            {!loading && eventsError && (
-              <div className="text-center py-20 bg-white rounded-2xl
-                              border border-dust-100 px-6">
-                <div className="text-5xl mb-4">⚠️</div>
-                <h3 className="font-display text-xl font-700 text-charcoal mb-2">
-                  Couldn't load races
-                </h3>
-                <p className="font-body text-dust-500 mb-6 max-w-sm mx-auto">
-                  {eventsError}
-                </p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="btn-primary"
-                >
-                  Try Again
-                </button>
-              </div>
-            )}
 
 {/* ── Error state ────────────────────────────────────────────── */}
             {!loading && eventsError && (
@@ -301,7 +286,7 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
             {/* ── Results grid ───────────────────────────────────────────── */}
             {!loading && !eventsError && filteredEvents.length > 0 && (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredEvents.map((event, i) => (
                     <div
                       key={event.id}
@@ -317,7 +302,7 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
                 </div>
 
                 <p className="text-center font-sans text-xs text-dust-400 mt-10">
-                  Showing all {filteredEvents.length} results · More events added weekly
+                  Showing all {filteredEvents.length} verified barrel races
                 </p>
               </>
             )}

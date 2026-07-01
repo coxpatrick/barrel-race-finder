@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Shield, Check, X, Clock, Eye, MapPin,
-  DollarSign, Calendar, ChevronRight, RefreshCw,
+ DollarSign, Calendar, RefreshCw,
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { fetchAllEventsAdmin, approveEvent, rejectEvent } from '../lib/api'
@@ -139,7 +139,7 @@ useEffect(() => {
         )}
 
         {/* Stats row */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           {[
             {
               label: 'Pending Review',
@@ -258,8 +258,9 @@ function AdminEventRow({ event, actionId, onApprove, onReject }: RowProps) {
   const pending = !event.isApproved
 
   return (
-    <div className={`bg-white rounded-2xl border overflow-hidden transition-all
-      ${pending ? 'border-amber-200' : 'border-dust-100'}`}>
+    <div className={`bg-white rounded-2xl border overflow-hidden transition-all duration-200
+  shadow-sm hover:shadow-md hover:-translate-y-0.5
+  ${pending ? 'border-amber-200 bg-amber-50/20' : 'border-dust-100'}`}>
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 p-5">
 
