@@ -39,10 +39,16 @@ const { event, loading, error } = useEvent(id)
     })
   }, [event])
 
-  const mapsQuery = encodeURIComponent(
-    event?.arenaAddress ?? `${event?.arena}, ${event?.city}, ${event?.state}`
-  )
-  const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`
+ const mapsDestination =
+  event?.lat && event?.lng
+    ? `${event.lat},${event.lng}`
+    : [event?.arena, event?.arenaAddress, event?.city, event?.state, 'USA']
+        .filter(Boolean)
+        .join(', ')
+
+const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+  mapsDestination
+)}`
 
 const handleToggleFavorite = async () => {
     if (!user) {

@@ -188,9 +188,7 @@ try {
   console.error('Geocoding failed:', geoError)
 }
 
-    console.log('Address:', fullAddress)
-    console.log('Coordinates:', coordinates)
-
+   
     if (form.flyerFile) {
       const fileExt = form.flyerFile.name.split('.').pop()
       const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`
