@@ -15,6 +15,7 @@ export default function BrowseEventsPage() {
   const [loading, setLoading]                     = useState(true)
   const [showBackToTop, setShowBackToTop]         = useState(false)
 const [view, setView] = useState<'list' | 'map'>('list')
+const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
 const { events, loading: eventsLoading, error: eventsError } = useEvents()
 
   const {
@@ -362,8 +363,12 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredEvents.map((event, i) => (
                     <div
-                      key={event.id}
-                      className="animate-fade-up opacity-0-init"
+  key={event.id}
+  onClick={() => {
+    setSelectedEventId(event.id)
+    setView('map')
+  }}
+  className="animate-fade-up opacity-0-init cursor-pointer"
                       style={{
                         animationFillMode: 'forwards',
                         animationDelay: `${Math.min(i * 40, 300)}ms`,
@@ -381,7 +386,10 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
             )}
             {!loading && !eventsError && filteredEvents.length > 0 && view === 'map' && (
   <div className="bg-white rounded-2xl border border-dust-100 p-4">
-  <EventMap events={filteredEvents} />
+  <EventMap
+  events={filteredEvents}
+  selectedEventId={selectedEventId}
+/>
 </div>
 )}
           </div>

@@ -180,7 +180,13 @@ const handleSubmit = async (e: React.FormEvent) => {
       'USA',
     ].filter(Boolean).join(', ')
 
-    const coordinates = await geocodeAddress(fullAddress)
+    let coordinates = null
+
+try {
+  coordinates = await geocodeAddress(fullAddress)
+} catch (geoError) {
+  console.error('Geocoding failed:', geoError)
+}
 
     console.log('Address:', fullAddress)
     console.log('Coordinates:', coordinates)
