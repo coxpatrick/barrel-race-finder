@@ -9,7 +9,7 @@ import {
 import { US_STATES } from '../data/constants'
 import { BarrelRace, EventSubmission } from '../types'
 import EventCard from '../components/EventCard'
-
+import { geocodeAddress } from '../lib/geocode'
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const AVAILABLE_CLASSES = [
@@ -159,97 +159,125 @@ export default function SubmitEventPage() {
   // ── Submit ─────────────────────────────────────────────────────────────────
 
 const handleSubmit = async (e: React.FormEvent) => {
-console.log('Submit clicked')
-console.log('Flyer file:', form.flyerFile)
-    e.preventDefault()
-    const errs = validateStep(3, form)
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs)
-      return
-    }
-    setStatus('submitting')
-let flyerUrl = form.flyer_url || null
+  e.preventDefault()
 
-if (form.flyerFile) {
-  const fileExt = form.flyerFile.name.split('.').pop()
-  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`
-  const filePath = `${user?.id || 'anonymous'}/${fileName}`
-
-  const { error: uploadError } = await supabase.storage
-    .from('event-flyers')
-    .upload(filePath, form.flyerFile)
-console.log('Upload error:', uploadError)
-  if (uploadError) {
-    setErrors({ name: 'Failed to upload flyer. Please try again.' })
-    setStatus('idle')
+  const errs = validateStep(3, form)
+  if (Object.keys(errs).length > 0) {
+    setErrors(errs)
     return
   }
 
-  const { data: publicUrlData } = supabase.storage
-    .from('event-flyers')
-    .getPublicUrl(filePath)
+  setStatus('submitting')
 
-  flyerUrl = publicUrlData.publicUrl
-}
-    console.log('Flyer URL:', flyerUrl)
-const { data, error } = await supabase
-      .from('events')
-      .insert([{
-        name:            form.name,
-        date:            form.date,
-        end_date:        form.endDate || null,
-        city:            form.city,
-        state:           form.state,
-        flyer_image_url: flyerUrl,
-        state_code:      form.stateCode,
-        arena:           form.arena,
-        arena_address:   form.arenaAddress || null,
-        added_money:     Number(form.addedMoney),
-        entry_fee:       Number(form.entryFee),
-        classes:         form.classes,
-        facebook_url:    form.facebookUrl || null,
-        website_url:     form.websiteUrl || null,
-        contact_name:    form.contactName || null,
-        contact_email:   form.contactEmail || null,
-        contact_phone:   form.contactPhone || null,
-        notes:           form.notes || null,
-        is_approved:     false,
-        is_featured:     false,
-        submitted_by:    user?.id ?? null,
-      }])
-      .select()
-    
-      .single()
-      console.log('Event insert error:', error)
-console.log('Event insert data:', data)
+  try {
+    let flyerUrl = form.flyer_url || null
 
-    if (error) {
-      setErrors({ name: 'Failed to submit. Please try again.' })
-      setStatus('idle')
-      return
+    const fullAddress = [
+      form.arena,
+      form.arenaAddress,
+      form.city,
+      form.state,
+      'USA',
+    ].filter(Boolean).join(', ')
+
+    const coordinates = await geocodeAddress(fullAddress)
+
+    console.log('Address:', fullAddress)
+    console.log('Coordinates:', coordinates)
+
+    if (form.flyerFile) {
+      const fileExt = form.flyerFile.name.split('.').pop()
+      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`
+      const filePath = `${user?.id || 'anonymous'}/${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('event-flyers')
+        .upload(filePath, form.flyerFile)
+
+      if (uploadError) {
+        console.error('Flyer upload error:', uploadError)
+        throw uploadError
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from('event-flyers')
+        .getPublicUrl(filePath)
+
+      flyerUrl = publicUrlData.publicUrl
     }
 
-    // Build a local preview from the returned row
+    const { data, error } = await supabase
+      .from('events')
+      .insert([{
+        name: form.name,
+        date: form.date,
+        end_date: form.endDate || null,
+        city: form.city,
+        state: form.state,
+        state_code: form.stateCode,
+        arena: form.arena,
+        arena_address: form.arenaAddress || null,
+
+        lat: coordinates?.lat ?? null,
+        lng: coordinates?.lng ?? null,
+
+        flyer_image_url: flyerUrl,
+        added_money: Number(form.addedMoney),
+        entry_fee: Number(form.entryFee),
+        classes: form.classes,
+        facebook_url: form.facebookUrl || null,
+        website_url: form.websiteUrl || null,
+        contact_name: form.contactName || null,
+        contact_email: form.contactEmail || null,
+        contact_phone: form.contactPhone || null,
+        notes: form.notes || null,
+        is_approved: false,
+        is_featured: false,
+        submitted_by: user?.id ?? null,
+      }])
+      .select()
+      .single()
+
+    console.log('Event insert error:', error)
+    console.log('Event insert data:', data)
+
+    if (error) {
+      throw error
+    }
+
     const saved: BarrelRace = {
-      id:           data.id,
-      name:         data.name,
-      date:         data.date,
-      endDate:      data.end_date ?? undefined,
-      city:         data.city,
-      state:        data.state,
-      stateCode:    data.state_code,
-      arena:        data.arena,
-      addedMoney:   data.added_money,
-      entryFee:     data.entry_fee,
-      classes:      data.classes ?? [],
-      isFeatured:   false,
-      isApproved:   false,
+      id: data.id,
+      name: data.name,
+      date: data.date,
+      endDate: data.end_date ?? undefined,
+      city: data.city,
+      state: data.state,
+      stateCode: data.state_code,
+      arena: data.arena,
+      arenaAddress: data.arena_address ?? undefined,
+      addedMoney: data.added_money,
+      entryFee: data.entry_fee,
+      classes: data.classes ?? [],
+      flyerImageUrl: data.flyer_image_url ?? undefined,
+      facebookUrl: data.facebook_url ?? undefined,
+      websiteUrl: data.website_url ?? undefined,
+      contactName: data.contact_name ?? undefined,
+      contactEmail: data.contact_email ?? undefined,
+      contactPhone: data.contact_phone ?? undefined,
+      notes: data.notes ?? undefined,
+      isFeatured: data.is_featured,
+      isApproved: data.is_approved,
+      createdAt: data.created_at,
     }
 
     setSubmittedEvent(saved)
     setStatus('success')
+  } catch (err) {
+    console.error('Submit failed:', err)
+    setErrors({ name: 'Failed to submit. Please try again.' })
+    setStatus('idle')
   }
-
+}
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   const fieldError = (key: keyof EventSubmission) =>

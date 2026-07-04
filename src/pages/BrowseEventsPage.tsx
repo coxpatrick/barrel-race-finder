@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { SlidersHorizontal, X, Search, ArrowUp } from 'lucide-react'
 import EventCard from '../components/EventCard'
 import FilterPanel from '../components/FilterPanel'
@@ -7,13 +7,14 @@ import { SkeletonGrid } from '../components/SkeletonCard'
 import { useEventFilters } from '../hooks/useEventFilters'
 import { useEvents } from '../hooks/useEvents'
 import { US_STATES } from '../data/constants'
-
+import { formatShortDate } from '../utils/helpers'
+import EventMap from '../EventMap'
 export default function BrowseEventsPage() {
   const [searchParams] = useSearchParams()
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [loading, setLoading]                     = useState(true)
   const [showBackToTop, setShowBackToTop]         = useState(false)
-
+const [view, setView] = useState<'list' | 'map'>('list')
 const { events, loading: eventsLoading, error: eventsError } = useEvents()
 
   const {
@@ -25,6 +26,7 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
     activeFilterCount,
   } = useEventFilters(events)
 
+  const weekendEvents = getThisWeekendEvents(filteredEvents).slice(0, 3)
 // Real loading state comes from useEvents — sync it to local state
   useEffect(() => {
     setLoading(eventsLoading)
@@ -108,7 +110,77 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
       </div>
 
       <div className="page-container mt-6 md:mt-8">
+{/* ── This Weekend Section ───────────────────────────────────────── */}
+{!loading && !eventsError && (
+  <div className="mb-6 bg-white border border-dust-100 rounded-2xl p-5 shadow-sm">
+    <div className="flex items-center justify-between gap-3 mb-4">
+      <div>
+        <p className="font-sans text-xs font-bold uppercase tracking-wider text-saddle-600">
+          🔥 This Weekend
+        </p>
+        <h2 className="font-display text-2xl font-bold text-charcoal">
+          Races coming up soon
+        </h2>
+      </div>
+    </div>
 
+    {weekendEvents.length > 0 ? (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {weekendEvents.map(event => {
+          const d = formatShortDate(event.date)
+
+          return (
+            <Link
+              key={event.id}
+              to={`/events/${event.id}`}
+              className="block rounded-xl border border-dust-100 bg-cream p-4
+                         hover:border-saddle-400 hover:shadow-md transition-all"
+            >
+              <p className="font-sans text-xs font-bold text-saddle-600 uppercase tracking-wide mb-1">
+                {d.month} {d.day}, {d.year}
+              </p>
+              <h3 className="font-display text-lg font-bold text-charcoal leading-snug">
+                {event.name}
+              </h3>
+              <p className="font-sans text-sm text-dust-500 mt-1">
+                {event.city}, {event.state}
+              </p>
+            </Link>
+          )
+        })}
+      </div>
+    ) : (
+      <p className="font-sans text-sm text-dust-500">
+        No races listed for this weekend. Check out upcoming events below.
+      </p>
+    )}
+  </div>
+)}
+<div className="flex justify-end mb-4">
+  <div className="flex bg-dust-100 rounded-xl p-1">
+    <button
+      onClick={() => setView('list')}
+      className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+        view === 'list'
+          ? 'bg-white shadow text-charcoal'
+          : 'text-dust-500'
+      }`}
+    >
+      📋 List View
+    </button>
+
+    <button
+      onClick={() => setView('map')}
+      className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+        view === 'map'
+          ? 'bg-white shadow text-charcoal'
+          : 'text-dust-500'
+      }`}
+    >
+      🗺 Map View
+    </button>
+  </div>
+</div>
         {/* ── Search + Mobile Filter Toggle ───────────────────────────────── */}
         <div className="flex gap-3 mb-4">
           <div className="flex-1 relative">
@@ -284,7 +356,8 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
             )}
 
             {/* ── Results grid ───────────────────────────────────────────── */}
-            {!loading && !eventsError && filteredEvents.length > 0 && (
+           
+            {!loading && !eventsError && filteredEvents.length > 0 && view === 'list' && (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredEvents.map((event, i) => (
@@ -306,6 +379,11 @@ const { events, loading: eventsLoading, error: eventsError } = useEvents()
                 </p>
               </>
             )}
+            {!loading && !eventsError && filteredEvents.length > 0 && view === 'map' && (
+  <div className="bg-white rounded-2xl border border-dust-100 p-4">
+  <EventMap events={filteredEvents} />
+</div>
+)}
           </div>
         </div>
       </div>
@@ -401,4 +479,26 @@ function monthName(num: string): string {
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
   ]
   return months[parseInt(num, 10) - 1] ?? num
+}
+function getThisWeekendEvents(events: any[]) {
+  const today = new Date()
+  const day = today.getDay()
+
+  const saturday = new Date(today)
+  saturday.setDate(today.getDate() + ((6 - day + 7) % 7))
+  saturday.setHours(0, 0, 0, 0)
+
+  const monday = new Date(saturday)
+  monday.setDate(saturday.getDate() + 2)
+  monday.setHours(0, 0, 0, 0)
+
+  return events
+    .filter(event => {
+      const eventDate = new Date(event.date)
+      return eventDate >= saturday && eventDate < monday
+    })
+    .sort(
+      (a, b) =>
+        new Date(a.date).getTime() - new Date(b.date).getTime()
+    )
 }

@@ -1,4 +1,4 @@
-# 🐎 Barrel Race Finder
+# 🐎 Barrel Bay
 
 **The #1 platform for barrel racers to find upcoming events across the United States.**
 

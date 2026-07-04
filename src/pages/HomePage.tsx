@@ -13,7 +13,7 @@ export default function HomePage() {
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
   const { events: featured, loading: featuredLoading } = useFeaturedEvents()
-
+const spotlightEvent = featured[0]
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (search.trim()) {
@@ -95,7 +95,7 @@ export default function HomePage() {
                            shadow-lg hover:shadow-xl whitespace-nowrap">
                 [ Search Races ]
 
-[ Submit Event ]
+
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -126,7 +126,63 @@ export default function HomePage() {
           </svg>
         </div>
       </section>
+{/* ── Featured Event Spotlight ─────────────────────────────────────── */}
+{!featuredLoading && spotlightEvent && (
+  <section className="py-12 bg-cream">
+    <div className="page-container">
+      <div className="relative overflow-hidden rounded-3xl bg-charcoal shadow-xl">
+        <div className="absolute inset-0 opacity-30">
+          <img
+  src={HERO_BG}
+  alt="Barrel racing arena"
+  className="w-full h-full object-cover"
+/>
+        </div>
 
+        <div className="absolute inset-0 bg-charcoal/75" />
+
+        <div className="relative z-10 p-6 md:p-10 lg:p-12 text-white">
+          <div className="inline-flex items-center gap-2 bg-saddle-500 text-white rounded-full px-4 py-1.5 mb-5">
+            <Star className="w-4 h-4 fill-white" />
+            <span className="font-sans text-xs font-bold uppercase tracking-wider">
+              Featured Event
+            </span>
+          </div>
+
+          <h2 className="font-display text-3xl md:text-5xl font-bold max-w-3xl leading-tight mb-4">
+            {spotlightEvent.name}
+          </h2>
+
+          <div className="flex flex-wrap gap-4 text-white/80 font-sans text-sm md:text-base mb-6">
+            <span className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-saddle-300" />
+              {new Date(spotlightEvent.date).toLocaleDateString()}
+            </span>
+
+            <span className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-saddle-300" />
+              {spotlightEvent.city}, {spotlightEvent.state}
+            </span>
+
+            {spotlightEvent.addedMoney > 0 && (
+              <span className="flex items-center gap-2">
+                💰 ${spotlightEvent.addedMoney.toLocaleString()} added
+              </span>
+            )}
+          </div>
+
+          <button
+            onClick={() => navigate(`/events/${spotlightEvent.id}`)}
+            className="btn-primary text-base px-6 py-3"
+          >
+            View Featured Race
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
       {/* ── Stats Banner ──────────────────────────────────────────────────── */}
       <StatsBanner />
 

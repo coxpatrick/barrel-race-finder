@@ -81,7 +81,7 @@ export default function Footer() {
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center
                         justify-between gap-4">
           <p className="font-sans text-xs text-white/40">
-            © {new Date().getFullYear()} Barrel Race Finder. All rights reserved.
+            © {new Date().getFullYear()} Barrel Bay. All rights reserved.
           </p>
           <p className="font-sans text-xs text-white/40 flex items-center gap-1">
             Made with <Heart className="w-3 h-3 text-saddle-500 fill-saddle-500" /> for the barrel racing community
