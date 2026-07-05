@@ -10,6 +10,7 @@ import { US_STATES } from '../data/constants'
 import { BarrelRace, EventSubmission } from '../types'
 import EventCard from '../components/EventCard'
 import { geocodeAddress } from '../lib/geocode'
+import { readFlyer } from '../lib/flyerReader'
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const AVAILABLE_CLASSES = [
@@ -129,11 +130,24 @@ export default function SubmitEventPage() {
     )
   }
 
-  const handleFlyerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null
-    set('flyerFile', file)
-    setFlyerPreview(file ? URL.createObjectURL(file) : null)
-  }
+const handleFlyerChange = async (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const file = e.target.files?.[0] ?? null
+
+  set('flyerFile', file)
+
+  setFlyerPreview(file ? URL.createObjectURL(file) : null)
+
+  if (!file) return
+
+  const extracted = await readFlyer(file)
+
+  setForm(prev => ({
+    ...prev,
+    ...extracted,
+  }))
+}
 
   // ── Step navigation ────────────────────────────────────────────────────────
 
