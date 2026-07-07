@@ -29,11 +29,15 @@ const spotlightEvent = featured[0]
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
-          <img
-            src={HERO_BG}
-            alt="Barrel racing arena"
-            className="w-full h-full object-cover"
-          />
+          <video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="w-full h-full object-cover"
+>
+  <source src="/videos/hero.mp4" type="video/mp4" />
+</video>
           <div className="absolute inset-0 hero-overlay" />
           {/* Grain texture overlay */}
           <div className="absolute inset-0 opacity-30"
