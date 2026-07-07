@@ -81,7 +81,7 @@ export function useEvent(id: string | undefined) {
       setLoading(true)
       setError(null)
       try {
-        const data = await fetchEventById(id)
+        const data = await fetchEventById(id!)
         if (!cancelled) setEvent(data)
       } catch (e) {
         if (!cancelled) setError('Failed to load event.')
