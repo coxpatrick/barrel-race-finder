@@ -14,13 +14,12 @@ import { readFlyer } from '../lib/flyerReader'
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const AVAILABLE_CLASSES = [
-  'Open', '1D–4D', '1D–5D', '2D–4D', '2D–5D',
+  'Open', '1D', '2D', '3D', '4D', '5D',
   'Futurity', 'Derby',
-  'Youth 12 & Under', 'Youth 13–17',
-  'Junior', 'Novice Rider', 'Novice Horse',
-  'Senior 50+', 'Senior 55+',
-  'Beginner', 'Lead Line', 'Poles', 'Amateur',
-]
+  '12 & Under', 'Youth', 'Amateur',
+  'Masters',
+  'Lead Line', 'Poles', 'Slot Race', 'High Roller','Showcase', 'PeeWee' , 'Incentives'
+,]
 
 const NOTES_MAX = 500
 
@@ -108,7 +107,7 @@ export default function SubmitEventPage() {
   const [flyerPreview, setFlyerPreview] = useState<string | null>(null)
   const [showPreview, setShowPreview]   = useState(false)
   const [submittedEvent, setSubmittedEvent] = useState<BarrelRace | null>(null)
-
+const [customClass, setCustomClass] = useState('')
   // ── Field helpers ──────────────────────────────────────────────────────────
 
   const set = <K extends keyof EventSubmission>(key: K, value: EventSubmission[K]) => {
@@ -737,6 +736,52 @@ try {
                         </button>
                       )
                     })}
+                    {form.classes
+  .filter(cls => !AVAILABLE_CLASSES.includes(cls))
+  .map(cls => (
+    <button
+      type="button"
+      key={cls}
+      onClick={() => toggleClass(cls)}
+      className="px-3 py-1.5 rounded-full font-sans text-sm font-500 border bg-saddle-600 text-white border-saddle-600 shadow-sm"
+    >
+      {cls} ✕
+    </button>
+  ))}
+                    <div className="w-full mt-3 flex flex-col sm:flex-row gap-2">
+  <input
+    type="text"
+    value={customClass}
+    onChange={(e) => setCustomClass(e.target.value)}
+    placeholder="Enter a custom class"
+    className="input flex-1"
+  />
+
+  <button
+    type="button"
+    onClick={() => {
+      const trimmedClass = customClass.trim()
+
+      if (!trimmedClass) return
+
+      const alreadyExists = form.classes.some(
+        (cls) => cls.toLowerCase() === trimmedClass.toLowerCase()
+      )
+
+      if (!alreadyExists) {
+        setForm((prev) => ({
+          ...prev,
+          classes: [...prev.classes, trimmedClass],
+        }))
+      }
+
+      setCustomClass('')
+    }}
+    className="btn-secondary whitespace-nowrap"
+  >
+    + Add Custom Class
+  </button>
+</div>
                   </div>
                 </div>
 
