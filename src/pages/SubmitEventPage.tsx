@@ -519,17 +519,22 @@ try {
                   title="Race Details"
                   desc="Tell us about the event location and date."
                 />
+<div>
+  <label htmlFor="name" className="label">
+    Race Name *
+  </label>
 
-                <div>
-                  <label htmlFor="name" className="label">Race Name *</label>
-                  <input
-                    id="name" type="text" value={form.name}
-                    onChange={e => set('name', e.target.value)}
-                    placeholder="e.g. Lone Star Summer Barrel Bash"
-                    className={inputCls('name')}
-                  />
-                  {fieldError('name')}
-                </div>
+  <input
+    id="name"
+    type="text"
+    value={form.name}
+    onChange={e => set('name', e.target.value)}
+    placeholder="e.g. Lone Star Summer Barrel Bash"
+    className={inputCls('name')}
+  />
+
+  {fieldError('name')}
+</div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -847,22 +852,7 @@ try {
                     className="input-field"
                   />
                 </div>
-<div>
-  <label htmlFor="flyerFile" className="label">
-    Event Flyer
-  </label>
 
-<input
-  id="flyerFile"
-  type="file"
-  accept="image/*"
-  className="input-field"
-  onChange={(e) => {
-    const file = e.target.files?.[0] || null
-    set('flyerFile', file)
-  }}
-/>
-</div>
                 <div>
                   <label htmlFor="websiteUrl" className="label">
                     Official Website

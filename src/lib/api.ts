@@ -125,15 +125,23 @@ export async function approveEvent(id: string): Promise<boolean> {
 }
 
 export async function rejectEvent(id: string): Promise<boolean> {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('events')
     .delete()
     .eq('id', id)
+    .select('id')
 
   if (error) {
     console.error('rejectEvent error:', error.message)
     return false
   }
+
+  if (!data || data.length === 0) {
+    console.error('rejectEvent: No event was deleted.')
+    return false
+  }
+
+  console.log('Deleted event:', data)
   return true
 }
 
