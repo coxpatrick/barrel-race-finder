@@ -172,6 +172,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   setStatus('submitting')
 
   try {
+   
     let flyerUrl = form.flyer_url || null
 
     const fullAddress = [

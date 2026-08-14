@@ -29,31 +29,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setProfile(p)
   }
 
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      if (session?.user) loadProfile(session.user.id)
-      setLoading(false)
-    })
+useEffect(() => {
+  let mounted = true
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setSession(session)
-        setUser(session?.user ?? null)
-        if (session?.user) {
-          await loadProfile(session.user.id)
-        } else {
-          setProfile(null)
+  // Get initial session
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (!mounted) return
+
+    setSession(session)
+    setUser(session?.user ?? null)
+    setLoading(false)
+
+    if (session?.user) {
+      setTimeout(() => {
+        if (mounted) {
+          loadProfile(session.user.id)
         }
-        setLoading(false)
-      }
-    )
+      }, 0)
+    }
+  })
 
-    return () => subscription.unsubscribe()
-  }, [])
+  // Listen for auth changes
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange((_event, session) => {
+    if (!mounted) return
+
+    setSession(session)
+    setUser(session?.user ?? null)
+    setLoading(false)
+
+    if (session?.user) {
+      setTimeout(() => {
+        if (mounted) {
+          loadProfile(session.user.id)
+        }
+      }, 0)
+    } else {
+      setProfile(null)
+    }
+  })
+
+  return () => {
+    mounted = false
+    subscription.unsubscribe()
+  }
+}, [])
 
   const signUp = async (
     email: string,
