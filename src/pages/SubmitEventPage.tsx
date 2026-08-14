@@ -17,14 +17,14 @@ const AVAILABLE_CLASSES = [
   'Futurity', 'Derby',
   '12 & Under', 'Youth', 'Amateur',
   'Masters',
-  'Lead Line', 'Poles', 'Slot Race', 'High Roller','Showcase', 'PeeWee' , 'Incentives'
+  'Lead Line', 'Poles', 'Slot Race', 'High Roller','Showcase', 'PeeWee' , 'Incentives' , 'Adult Side Pot' , 'Adult'
 ,]
 
 const NOTES_MAX = 500
 
 const STEPS = [
   { number: 1, label: 'Race Details'    },
-  { number: 2, label: 'Fees & Divisions' },
+  { number: 2, label: 'Fees & Classes' },
   { number: 3, label: 'Contact & Links' },
 ]
 
@@ -364,7 +364,7 @@ try {
                     icon: <Globe className="w-5 h-5 text-blue-600" />,
                     bg: 'bg-blue-100',
                     title: 'Riders Find You',
-                    desc: 'Your event is searchable by state, date, and division.',
+                    desc: 'Your event is searchable by state, date, and class.',
                     done: false,
                   },
                 ].map((step, i, arr) => (
@@ -605,13 +605,13 @@ try {
               </div>
             )}
 
-            {/* ══ STEP 2: Fees & Divisions ══════════════════════════════════ */}
+            {/* ══ STEP 2: Fees & Classes ══════════════════════════════════ */}
             {currentStep === 2 && (
               <div className="card p-6 md:p-8 space-y-5 animate-fade-up">
                 <StepHeader
                   number={2}
-                  title="Fees & Divisions"
-                  desc="Set entry costs and which divisions will compete."
+                  title="Fees & Classes"
+                  desc="Set entry costs and which classes will compete."
                 />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -707,10 +707,10 @@ try {
                   </div>
                 </div>
 
-                {/* Division chips */}
+                {/* Class chips */}
                 <div>
                   <label className="label">
-                    Divisions{' '}
+                    Classes{' '}
                     <span className="text-dust-400 font-400">(select all that apply)</span>
                   </label>
                   <div className="flex flex-wrap gap-2 mt-2">

@@ -8,6 +8,8 @@ const CLASS_FILTERS = [
   { value: 'Futurity', label: 'Futurity', color: 'bg-mesa-100 text-mesa-800 border-mesa-200' },
   { value: 'Derby',    label: 'Derby',    color: 'bg-orange-100 text-orange-800 border-orange-200' },
   { value: 'Youth',    label: 'Youth',    color: 'bg-prairie-100 text-prairie-800 border-prairie-200' },
+  { value: 'Adult',          label: 'Adult',          color: 'bg-blue-100 text-blue-800 border-blue-200' },
+  { value: 'Adult Side Pot', label: 'Adult Side Pot', color: 'bg-purple-100 text-purple-800 border-purple-200' },
   { value: 'Junior',   label: 'Junior',   color: 'bg-green-100 text-green-800 border-green-200' },
   { value: 'Novice',   label: 'Novice',   color: 'bg-blue-100 text-blue-800 border-blue-200' },
   { value: 'Senior',   label: 'Senior',   color: 'bg-purple-100 text-purple-800 border-purple-200' },
@@ -118,10 +120,10 @@ export default function FilterPanel({
 
         <div className="border-t border-dust-100" />
 
-        {/* ── Division / Class ─────────────────────────────────────────────── */}
+        {/* ── Class ─────────────────────────────────────────────── */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <label className="label mb-0">Division</label>
+            <label className="label mb-0">Classes</label>sssss
             {filters.classes.length > 0 && (
               <button
                 onClick={() => onUpdate('classes', [])}
@@ -152,7 +154,7 @@ export default function FilterPanel({
           </div>
           {filters.classes.length > 0 && (
             <p className="font-sans text-xs text-dust-400 mt-2">
-              Showing races with any selected division
+              Showing races with any selected class
             </p>
           )}
         </div>

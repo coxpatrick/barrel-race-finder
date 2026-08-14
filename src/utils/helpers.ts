@@ -82,14 +82,36 @@ export const filterEvents = (events: BarrelRace[], filters: EventFilters): Barre
     // ── Added money
     if (filters.minAddedMoney > 0 && event.addedMoney < filters.minAddedMoney) return false
 
-    // ── Classes: event must contain at least one of the selected classes
-    if (filters.classes.length > 0) {
-      const eventClasses = (event.classes ?? []).map(c => c.toLowerCase())
-      const hasMatch = filters.classes.some(fc =>
-        eventClasses.some(ec => ec.includes(fc.toLowerCase()))
+  // ── Classes: event must contain at least one of the selected classes
+if (filters.classes.length > 0) {
+  const eventClasses = (event.classes ?? []).map(c =>
+    c.trim().toLowerCase()
+  )
+
+  const hasMatch = filters.classes.some(fc => {
+    const filterClass = fc.trim().toLowerCase()
+
+    // 1D–5D filter should match any D class
+    if (filterClass === '1d') {
+      return eventClasses.some(ec =>
+        ['1d', '2d', '3d', '4d', '5d'].includes(ec)
       )
-      if (!hasMatch) return false
     }
+
+    // Keep Adult and Adult Side Pot separate
+    if (filterClass === 'adult') {
+      return eventClasses.includes('adult')
+    }
+
+    if (filterClass === 'adult side pot') {ssss
+      return eventClasses.includes('adult side pot')
+    }
+
+    return eventClasses.includes(filterClass)
+  })
+
+  if (!hasMatch) return false
+}
 
     return true
   })
