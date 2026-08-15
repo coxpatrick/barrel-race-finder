@@ -103,7 +103,7 @@ if (filters.classes.length > 0) {
       return eventClasses.includes('adult')
     }
 
-    if (filterClass === 'adult side pot') {ssss
+    if (filterClass === 'adult side pot') {
       return eventClasses.includes('adult side pot')
     }
 

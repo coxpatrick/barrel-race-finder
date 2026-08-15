@@ -82,9 +82,7 @@ function validateStep(step: number, form: EventSubmission): FormErrors {
     if (!form.stateCode)      e.stateCode = 'State is required'
     if (!form.arena.trim())   e.arena   = 'Arena name is required'
   }
-  if (step === 2) {
-    if (Number(form.entryFee) <= 0) e.entryFee = 'Entry fee must be greater than $0'
-  }
+
 
   return e
 }
@@ -613,8 +611,9 @@ try {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="entryFee" className="label">
-                      Entry Fee per Run ($) *
-                    </label>
+  Open Entry Fee ($){' '}
+  <span className="text-dust-400 font-400">(optional)</span>
+</label>
                     <input
                       id="entryFee" type="number" min={0} step={5}
                       value={form.entryFee || ''}
