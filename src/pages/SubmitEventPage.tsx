@@ -85,11 +85,7 @@ function validateStep(step: number, form: EventSubmission): FormErrors {
   if (step === 2) {
     if (Number(form.entryFee) <= 0) e.entryFee = 'Entry fee must be greater than $0'
   }
-  if (step === 3) {
-    if (!form.contactName?.trim()) e.contactName = 'Contact name is required'
-    if (!form.contactEmail?.trim() && !form.contactPhone?.trim())
-      e.contactEmail = 'Provide at least one contact method'
-  }
+
   return e
 }
 
@@ -799,7 +795,9 @@ try {
                 />
 
                 <div>
-                  <label htmlFor="contactName" className="label">Your Name *</label>
+                  <label htmlFor="contactName" className="label">
+  Your Name <span className="text-dust-400 font-400">(optional)</span>
+</label>
                   <input
                     id="contactName" type="text" value={form.contactName}
                     onChange={e => set('contactName', e.target.value)}
@@ -811,7 +809,9 @@ try {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="contactEmail" className="label">Email</label>
+                    <label htmlFor="contactEmail" className="label">
+  Email <span className="text-dust-400 font-400">(optional)</span>
+</label>
                     <input
                       id="contactEmail" type="email" value={form.contactEmail}
                       onChange={e => set('contactEmail', e.target.value)}
@@ -821,7 +821,9 @@ try {
                     {fieldError('contactEmail')}
                   </div>
                   <div>
-                    <label htmlFor="contactPhone" className="label">Phone</label>
+                    <label htmlFor="contactPhone" className="label">
+  Phone <span className="text-dust-400 font-400">(optional)</span>
+</label>
                     <input
                       id="contactPhone" type="tel" value={form.contactPhone}
                       onChange={e => set('contactPhone', e.target.value)}
@@ -831,7 +833,7 @@ try {
                   </div>
                 </div>
 
-                <div>
+                <div>s
                   <label htmlFor="facebookUrl" className="label">
                     Facebook Event URL
                   </label>
