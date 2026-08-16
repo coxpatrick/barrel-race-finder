@@ -243,7 +243,46 @@ const spotlightEvent = featured[0]
           </div>
         </div>
       </section>
+{/* ── Sponsors ─────────────────────────────────────────────────────── */}
+<section className="py-14 lg:py-16 bg-white border-y border-dust-100">
+  <div className="page-container text-center">
 
+    <p className="font-sans text-xs font-bold uppercase tracking-widest text-saddle-600 mb-2">
+      Proud Sponsor of Barrel Bay
+    </p>
+
+    <h2 className="font-display text-2xl md:text-3xl font-bold text-charcoal mb-8">
+      Supporting the Barrel Racing Community
+    </h2>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-4xl mx-auto">
+
+  <div className="flex flex-col items-center">
+    <img
+      src="/sponsors/dfet-logo.jpg"
+      alt="DFET - Dowell Farms & Equine Therapy"
+      className="w-full max-w-sm h-auto object-contain"
+    />
+    <p className="font-body text-dust-500 text-sm mt-4">
+      Dowell Farms & Equine Therapy
+    </p>
+  </div>
+
+  <div className="flex flex-col items-center">
+    <img
+      src="/sponsors/second-sponsor-logo.png"
+      alt="One Source Auto Glass"
+      className="w-full max-w-sm h-auto object-contain"
+    />
+    <p className="font-body text-dust-500 text-sm mt-4">
+      One Source Auto Glass
+    </p>
+  </div>
+
+</div>
+
+  </div>
+</section>
       {/* ── How It Works ─────────────────────────────────────────────────── */}
       <section className="bg-saddle-50 border-y border-saddle-100 py-16 lg:py-24">
         <div className="page-container">
