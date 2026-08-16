@@ -794,15 +794,18 @@ try {
                 />
 
                 <div>
-                  <label htmlFor="contactName" className="label">
-  Your Name <span className="text-dust-400 font-400">(optional)</span>
+                 <label htmlFor="contactName" className="label">
+  Producer Name <span className="text-dust-400 font-400">(optional)</span>
 </label>
-                  <input
-                    id="contactName" type="text" value={form.contactName}
-                    onChange={e => set('contactName', e.target.value)}
-                    placeholder="First and last name"
-                    className={inputCls('contactName')}
-                  />
+
+<input
+  id="contactName"
+  type="text"
+  value={form.contactName}
+  onChange={e => set('contactName', e.target.value)}
+  placeholder="Producer name"
+  className={inputCls('contactName')}
+/>
                   {fieldError('contactName')}
                 </div>
 
