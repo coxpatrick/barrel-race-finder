@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { label: 'Home',          path: '/' },
   { label: 'Browse Events', path: '/events' },
   { label: 'Submit Event',  path: '/submit' },
+  { label: 'My Stable',     path: '/stable' },
   { label: 'About',         path: '/about' },
 ]
 

@@ -9,6 +9,7 @@ import AboutPage from './pages/AboutPage';
 import AuthPage from './pages/AuthPage';
 import AccountPage from './pages/AccountPage';
 import AdminPage from './pages/AdminPage'
+import MyStablePage from './pages/MyStablePage';
 // Scroll to top on route change
 function ScrollToTop() {
   return null; // react-router-dom v6 handles this via ScrollRestoration
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="/about"        element={<AboutPage />} />
             <Route path="/auth"         element={<AuthPage />} />
             <Route path="/account"      element={<AccountPage />} />
+            <Route path="/stable" element={<MyStablePage />} />
             <Route path="/admin"        element={<AdminPage />} />
             {/* TODO: Add protected routes when user auth is implemented */}
             {/* <Route path="/dashboard"  element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} /> */}
