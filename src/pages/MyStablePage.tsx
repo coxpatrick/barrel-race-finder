@@ -1,6 +1,7 @@
 import { Plus, Flag, Trophy, ChevronRight } from 'lucide-react'
 
 export default function MyStablePage() {
+  
   return (
     <div className="min-h-screen bg-cream">
       <section className="page-container py-12 lg:py-16">
@@ -21,13 +22,13 @@ export default function MyStablePage() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <button
-              type="button"
-              className="btn-secondary flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              Add Horse
-            </button>
+           <a
+  href="/stable/add"
+  className="btn-secondary flex items-center gap-2"
+>
+  <Plus className="w-4 h-4" />
+  Add Horse
+</a>
 
             <button
               type="button"
